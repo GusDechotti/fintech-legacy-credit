@@ -6,6 +6,16 @@ Aplicação de análise de crédito desenvolvida com Spring Boot 4.0.3, JPA, H2 
 
 ### Controller:
 
+### SolicitacaoCreditoController.analisarSolicitacao() --- NATAN KAINAK
+Arquivo: SolicitacaoCreditoController.java
+
+- Feature Envy: Usa HashMap<String, Object> em vez de DTOs (SolicitacaoResponse), perdendo a clareza do contrato da API.
+  O Controller precisa saber exatamente quais são as chaves ("valor", "cliente", "aprovado") para montar a resposta, em vez de apenas retornar um objeto ResultadoAnalise
+- Inconsistência de URL: Mapeamento no controller diverge do que está sendo testado.
+- Aceita valores negativos ou strings vazias sem erro. Poderia ter um '@NotNull(message = "O valor é obrigatório")' por exemplo.
+- O código recebe Double(pode ser null) mas o método recebe double (que não pode ser null). Isso gera o risco de se ter um NullPointerException caso o valor venha como null.
+- O catch (Exception e) esconde bugs reais do sistema.
+
 
 ### Model:
 OK
