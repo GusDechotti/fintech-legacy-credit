@@ -17,7 +17,7 @@ OK
 -  Método ´analisarSolicitacao´ é um código podre pois é muito longo 
 - O código que analisa PJ e PF é o mesmo e pode ser passado para uma método (código repetido)
 
-### Service Processador de venda
+### Service Processador de  - Kelvin
 **Linhas 18–24 apresentam um *code smell*:**
 
 ```java
