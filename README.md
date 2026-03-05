@@ -6,11 +6,7 @@ Aplicação de análise de crédito desenvolvida com Spring Boot 4.0.3, JPA, H2 
 
 # Controller:
 
-## Dívida Técnica - Vitor Parente
-
-### Code smells Testes Frágeis
-
-### SolicitacaoCreditoController.analisarSolicitacao() --- NATAN KAINAK
+## SolicitacaoCreditoController.analisarSolicitacao() --- NATAN KAINAK
 Arquivo: SolicitacaoCreditoController.java
 
 - Feature Envy: Usa HashMap<String, Object> em vez de DTOs (SolicitacaoResponse), perdendo a clareza do contrato da API.
@@ -20,6 +16,9 @@ Arquivo: SolicitacaoCreditoController.java
 - O código recebe Double(pode ser null) mas o método recebe double (que não pode ser null). Isso gera o risco de se ter um NullPointerException caso o valor venha como null.
 - O catch (Exception e) esconde bugs reais do sistema.
 
+## Dívida Técnica - Vitor Parente
+
+### Code smells Testes Frágeis
 
 **Explicação:**  
 Quando um teste depende da data atual, do estado do banco ou da configuração do ambiente, ele deixa de ser totalmente previsível. Isso significa que dois desenvolvedores executando o mesmo teste podem obter resultados diferentes. Testes determinísticos devem sempre produzir o mesmo resultado para a mesma entrada, independentemente do ambiente ou do momento da execução.
@@ -62,9 +61,9 @@ OK
 # Repository:
 OK
 
-# Service Analise de crédito:
--  Método ´analisarSolicitacao´ é um código podre pois é muito longo 
-- O código que analisa PJ e PF é o mesmo e pode ser passado para uma método (código repetido)
+# Service Analise de crédito: - Venicius
+- Long Method: ~59 linhas centralizando validação, regras e IO.
+- Deep Nesting: 5 níveis de if aninhados. Dificulta a compreensão do fluxo.
 
 # Service Processador de  - Kelvin
 **Linhas 18–24 apresentam um *code smell*:**
