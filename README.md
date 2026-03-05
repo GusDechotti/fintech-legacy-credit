@@ -270,7 +270,7 @@ Este projeto é parte de um exercício de refatoração de código legado.
 
 Desenvolvido como exemplo de aplicação Spring Boot com boas práticas de desenvolvimento.
 
-## Dívida Técnica - tebas
+## Dívida Técnica - Vitor Parente
 
 ### Code smells Testes Frágeis
 
