@@ -21,6 +21,7 @@ OK
 - 
 
 ### Testes
+OK
 
 ## 🚀 Tecnologias Utilizadas
 
