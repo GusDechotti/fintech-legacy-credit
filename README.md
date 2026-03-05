@@ -217,6 +217,7 @@ fintech-legacy-credit/
 │           └── br.com.nogueiranogueira.aularefatoracao.TestAnaliseCreditoService.java
 │           └── SolicitacaoCreditoIntegrationTest.java
 └── pom.xml
+```
 
 ## 🔐 Regras de Negócio
 
