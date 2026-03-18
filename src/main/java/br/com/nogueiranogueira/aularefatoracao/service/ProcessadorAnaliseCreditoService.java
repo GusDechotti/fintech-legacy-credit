@@ -1,54 +1,40 @@
 package br.com.nogueiranogueira.aularefatoracao.service;
 
-import br.com.nogueiranogueira.aularefatoracao.dto.SolicitacaoCreditoRecord;
+import br.com.nogueiranogueira.aularefatoracao.dto.SolicitacaoCreditoRequest;
 import br.com.nogueiranogueira.aularefatoracao.factory.AnaliseCreditoFactory;
-import br.com.nogueiranogueira.aularefatoracao.strategy.AnaliseStrategy;
-import br.com.nogueiranogueira.aularefatoracao.strategy.AnaliseStrategyPF;
-import br.com.nogueiranogueira.aularefatoracao.strategy.AnaliseStrategyPJ;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Service
-public class ProcessadorAnaliseCreditoService {
+public class ProcessadorCreditoService {
 
-    private List<AnaliseStrategy> analiseStrategies;
+    private static final Logger log = LoggerFactory.getLogger(ProcessadorCreditoService.class);
 
-    public ProcessadorAnaliseCreditoService() {
+    public boolean processarIndividual(SolicitacaoCreditoRequest solicitacao) {
+        log.info("Consultando Bureau de Crédito Externo para: {}", solicitacao.cliente());
+        consultarBureauExterno();
 
+        return AnaliseCreditoFactory.obterEstrategia(solicitacao.tipoConta()).analisar(solicitacao);
     }
 
-    public void processarLote(List<SolicitacaoCreditoRecord> solicitacoes) {
-        System.out.println("=== Iniciando Processamento Paralelo (Virtual Threads) ===");
-        long inicio = System.currentTimeMillis();
-
-        // Tenta criar uma thread virtual para CADA solicitação.
-        // Se houver 10.000 solicitações, ele dispara as 10.000 de uma vez.
-        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-
-            for (SolicitacaoCreditoRecord solicitacao : solicitacoes) {
-                executor.submit(() -> processarIndividual(solicitacao));
-            }
-
-        } // O try-with-resources aguarda TODAS as threads terminarem aqui.
-
-        long fim = System.currentTimeMillis();
-        System.out.println("Tempo Total: " + (fim - inicio) + " ms");
-    }
-
-    public void processarIndividual(SolicitacaoCreditoRecord solicitacao) {
-        if (solicitacao.negativado()) {
-            System.out.println("Rejeição Automática: Negativado -> " + solicitacao.cliente());
-            return;
+    public void processarLote(List<SolicitacaoCreditoRequest> solicitacoes) {
+        try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
+            solicitacoes.forEach(solicitacao ->
+                    executor.submit(() -> processarIndividual(solicitacao)));
         }
+    }
 
-        analiseStrategies.stream()
-                .filter(e -> e.elegivel(solicitacao))
-                .findFirst()
-                .ifPresentOrElse(
-                        estrategia -> estrategia.analisar(solicitacao),
-                        () -> System.out.println("Nenhuma estratégia encontrada para este perfil.")
-                );
+    private void consultarBureauExterno() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log.error("Consulta ao bureau interrompida", e);
+        }
     }
 }
