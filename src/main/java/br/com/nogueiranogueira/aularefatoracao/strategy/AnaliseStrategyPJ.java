@@ -6,13 +6,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AnaliseStrategyPJ implements AnaliseStrategy {
+public final class AnaliseStrategyPJ implements AnaliseStrategy {
 
     private static final Logger log = LoggerFactory.getLogger(AnaliseStrategyPJ.class);
 
     private static final int SCORE_MINIMO = 500;
     private static final int SCORE_ALTO_VALOR = 700;
     private static final double LIMITE_ALTO_VALOR = 50000.0;
+
+    @Override
+    public String pais() { return "BR"; }
 
     @Override
     public boolean analisar(SolicitacaoCreditoRequest solicitacao) {

@@ -9,13 +9,16 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 @Component
-public class AnaliseStrategyPF implements AnaliseStrategy {
+public final class AnaliseStrategyPF implements AnaliseStrategy {
 
     private static final Logger log = LoggerFactory.getLogger(AnaliseStrategyPF.class);
 
     private static final int SCORE_MINIMO = 500;
     private static final int SCORE_ALTO_VALOR = 800;
     private static final double LIMITE_ALTO_VALOR = 5000.0;
+
+    @Override
+    public String pais() { return "BR"; }
 
     @Override
     public boolean analisar(SolicitacaoCreditoRequest solicitacao) {

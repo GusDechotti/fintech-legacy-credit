@@ -1,5 +1,6 @@
 package br.com.nogueiranogueira.aularefatoracao.service;
 
+import br.com.nogueiranogueira.aularefatoracao.domain.Documento;
 import br.com.nogueiranogueira.aularefatoracao.dto.SolicitacaoCreditoRequest;
 import br.com.nogueiranogueira.aularefatoracao.factory.AnaliseCreditoFactory;
 import org.slf4j.Logger;
@@ -19,7 +20,12 @@ public class ProcessadorCreditoService {
         log.info("Consultando Bureau de Crédito Externo para: {}", solicitacao.cliente());
         consultarBureauExterno();
 
-        return AnaliseCreditoFactory.obterEstrategia(solicitacao.tipoConta()).analisar(solicitacao);
+        Documento documento = switch (solicitacao.tipoConta()) {
+            case PF -> new Documento.Cpf(solicitacao.documento());
+            case PJ -> new Documento.Cnpj(solicitacao.documento());
+        };
+
+        return AnaliseCreditoFactory.obterEstrategia(documento).analisar(solicitacao);
     }
 
     public void processarLote(List<SolicitacaoCreditoRequest> solicitacoes) {
